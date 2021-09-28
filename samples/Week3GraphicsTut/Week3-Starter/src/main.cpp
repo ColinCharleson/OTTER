@@ -56,7 +56,7 @@ GLFWwindow* window;
 // The current size of our window in pixels
 glm::ivec2 windowSize = glm::ivec2(800, 800);
 // The title of our GLFW window
-std::string windowTitle = "INFR-1350U";
+std::string windowTitle = "Colin Charleson - 100787799";
 
 void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height)
 {
@@ -115,9 +115,9 @@ int main() {
 	glDebugMessageCallback(GlDebugMessage, nullptr);
 
 	static const GLfloat points[] = {
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f
+		-1.0f, -1.0f, 0.5f,
+		0.0f, -1.0f, 0.5f,
+		-1.0f, 0.0f, 0.5f
 	};
 
 	static const GLfloat colors[] = {
@@ -128,10 +128,10 @@ int main() {
 
 	static const float interleaved[] = {
 		// X Y Z R G B
-		0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 0.3f, 0.2f, 0.5f,
-		-0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 1.0f
+		0.5f, 0.0f, 0.5f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.5f, 0.5f, 0.3f, 0.0f, 0.7f,
+		0.0f, 0.5f, 0.5f, 0.3f, 0.4f, 0.0f,
+		-0.5f, 0.0f, 0.5f, 0.0f, 0.4f, 0.2f
 	};
 
 	VertexBuffer* interleaved_vbo = new VertexBuffer();
@@ -175,6 +175,11 @@ int main() {
 	shader->LoadShaderPartFromFile("shaders/frag_shader.glsl", ShaderPartType::Fragment);
 	shader->Link();
 
+	Shader* shaderColin = new Shader();
+	shaderColin->LoadShaderPartFromFile("shaders/vertex_shader - Colin.glsl", ShaderPartType::Vertex);
+	shaderColin->LoadShaderPartFromFile("shaders/frag_shader - Colin.glsl", ShaderPartType::Fragment);
+	shaderColin->Link();
+
 	// GL states
 	glEnable(GL_DEPTH_TEST);
 
@@ -191,13 +196,14 @@ int main() {
 		double thisFrame = glfwGetTime();
 		float dt = static_cast<float>(thisFrame - lastFrame);
 
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClearColor(0.6f, 0.3f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader->Bind();
 		vao->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
+		shaderColin->Bind();
 		vao2->Bind();
 		glDrawElements(GL_TRIANGLES, (GLenum)interleaved_ibo->GetElementCount(), (GLenum)interleaved_ibo->GetElementType(), nullptr);
 		VertexArrayObject::Unbind();
